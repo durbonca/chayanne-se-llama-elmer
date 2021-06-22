@@ -1,3 +1,6 @@
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 import env from "react-dotenv";
 
 const firebaseConfig = {
@@ -9,4 +12,9 @@ const firebaseConfig = {
   appId: env.APPID
 };
 
-export default firebaseConfig;
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+export {auth, db, firebase};

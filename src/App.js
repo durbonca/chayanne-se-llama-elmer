@@ -1,33 +1,33 @@
 import { useState } from 'react'
-import { useUser, useFirebaseApp } from "reactfire";
-import "firebase/auth";
 import AppIdea from "./components/AppIdea";
 import AddIdea from "./components/AddIdea";
+import { firebase, auth, db } from './firebase'
 
 function App() {
 
-  const firebase = useFirebaseApp()
-
-  const {data: user} = useUser()
+  const [user, setUser] = useState(null)
 
   const doLogin = async () => {
-    const provider = new firebase.auth().GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
     try {
-      await firebase.auth().signInWithPopup(provider);
+      setUser(await firebase.auth().signInWithPopup(provider))
     } catch (error) {
       console.error(error);
     }
   };
+
   const doLogout = async () => {
     try {
-      await firebase.auth().signOut();
+      setUser(await firebase.auth().signOut())
     } catch (error) {
       console.error(error);
     }
   };
 
-  console.log(user)
-
+  const addIdea = () => {
+    console.log('Agregando mi idea')
+  }
+  
   return (
     <div className="container mx-auto p-4">
     {/* Main box */}
@@ -47,7 +47,7 @@ function App() {
         user={user}
         doLogin={doLogin}
         doLogout={doLogout}
-        /* @add-idea="addIdea" */
+        addIdea={addIdea}
       />{/* 
       <!-- Idea item -->
       <transition-group name="list-complete">
