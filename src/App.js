@@ -1,27 +1,32 @@
-import { auth, db, firebase } from "./firebase.js";
+import { useState } from 'react'
+import { useUser, useFirebaseApp } from "reactfire";
+import "firebase/auth";
 import AppIdea from "./components/AppIdea";
 import AddIdea from "./components/AddIdea";
-import { useState } from 'react'
 
 function App() {
 
-  const [user, setUser] = useState(null)
+  const firebase = useFirebaseApp()
+
+  const {data: user} = useUser()
 
   const doLogin = async () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new firebase.auth().GoogleAuthProvider();
     try {
-      await auth.signInWithPopup(provider);
+      await firebase.auth().signInWithPopup(provider);
     } catch (error) {
       console.error(error);
     }
   };
   const doLogout = async () => {
     try {
-      await auth.signOut();
+      await firebase.auth().signOut();
     } catch (error) {
       console.error(error);
     }
   };
+
+  console.log(user)
 
   return (
     <div className="container mx-auto p-4">

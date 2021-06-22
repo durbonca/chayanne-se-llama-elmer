@@ -1,7 +1,6 @@
 export default function AddIdea({...props}){
 
   const {user, doLogin, doLogout} = props
-  console.log(user)
 
     return (
         <section className="mb-6">
