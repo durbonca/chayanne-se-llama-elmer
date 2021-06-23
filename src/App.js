@@ -23,10 +23,6 @@ function App() {
       console.error(error);
     }
   };
-
-  const addIdea = () => {
-    console.log('Agregando mi idea')
-  }
   
   return (
     <div className="container mx-auto p-4">
@@ -47,19 +43,24 @@ function App() {
         user={user}
         doLogin={doLogin}
         doLogout={doLogout}
-        addIdea={addIdea}
-      />{/* 
-      <!-- Idea item -->
+        db={db}
+      />
+      
+      {/* <!-- Idea item -->
       <transition-group name="list-complete">
-        <AppIdea
-          :user="user"
-          v-for="idea in ideas"
-          :key="idea.createdAt"
-          :idea="idea"
-          @vote-idea="voteIdea"
-          @remove-idea="showRemoveIdeaModal"
-          className="idea"
-        />
+        {
+          ideas.map(idea => {
+            <AppIdea
+              user={user}
+              v-for="idea in ideas"
+              :key="idea.createdAt"
+              :idea="idea"
+              @vote-idea="voteIdea"
+              @remove-idea="showRemoveIdeaModal"
+              className="idea"
+            />
+          })
+          }
       </transition-group>
       <!-- End Main box --> */}
     </div>

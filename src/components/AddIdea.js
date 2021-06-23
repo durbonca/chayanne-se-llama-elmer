@@ -1,14 +1,36 @@
+import { useState } from "react"
+
 export default function AddIdea({...props}){
 
-  const {user, doLogin, doLogout, addIdea} = props
+    const {user, doLogin, doLogout, db} = props
+    const [idea, setIdea] = useState('')
 
-    console.log(user)
+    const addIdea = async (event) => {
+        event.preventDefault();
+        try {
+          await db.collection("ideas").add({
+            name: idea,
+            user: user.user.uid,
+            userName: user.user.displayName,
+            createdAt: Date.now(),
+            votes: 0,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+        setIdea('')
+      }; 
+
+    const handleChange = (event) => {
+        setIdea(event.target.value)
+    }
 
     return (
         <section className="mb-6">
-            <form onSubmit={() => addIdea()} className="sm:flex">
+            <form onSubmit={addIdea} className="sm:flex">
             <input
-                v-model="idea"
+                value={idea}
+                onChange={handleChange}
                 className="w-full p-3 sm:flex-auto"
                 type="text"
                 required
