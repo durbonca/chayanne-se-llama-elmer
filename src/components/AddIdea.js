@@ -1,8 +1,7 @@
 import { useState } from "react"
 
-export default function AddIdea({...props}){
+export default function AddIdea({user, doLogin, doLogout, db}){
 
-    const {user, doLogin, doLogout, db} = props
     const [idea, setIdea] = useState('')
 
     const addIdea = async (event) => {

@@ -1,11 +1,57 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppIdea from "./components/AppIdea";
 import AddIdea from "./components/AddIdea";
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { firebase, auth, db } from './firebase'
+import './index.css';
 
 function App() {
 
+  // transition
+  const Fade = ({ children, ...props }) => (
+    <CSSTransition
+      {...props}
+      timeout={1000}
+      classNames="idea"
+    >
+      {children}
+    </CSSTransition>
+  );
+
   const [user, setUser] = useState(null)
+
+  //ideas
+  const [ideas, setIdeas] = useState([]);
+
+  const getIdeas = async () => {
+    db.collection("ideas")
+    .orderBy("votes", "desc")
+    .onSnapshot(
+      (snapshot) => {
+        const newIdeas = [];
+        snapshot.docs.forEach((doc) => {
+          let { name, user, userName, createdAt, votes } = doc.data();
+          let id = doc.id;
+          newIdeas.push({
+            name,
+            user,
+            userName,
+            createdAt,
+            votes,
+            id,
+          });
+        });
+        setIdeas(newIdeas);
+      },
+      (error) => console.error(error)
+    );
+  }
+
+
+  useEffect( () => {
+      getIdeas()
+    } ,[])
+
 
   const doLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -23,7 +69,7 @@ function App() {
       console.error(error);
     }
   };
-  
+
   return (
     <div className="container mx-auto p-4">
     {/* Main box */}
@@ -46,23 +92,24 @@ function App() {
         db={db}
       />
       
-      {/* <!-- Idea item -->
-      <transition-group name="list-complete">
-        {
-          ideas.map(idea => {
-            <AppIdea
-              user={user}
-              v-for="idea in ideas"
-              :key="idea.createdAt"
-              :idea="idea"
-              @vote-idea="voteIdea"
-              @remove-idea="showRemoveIdeaModal"
-              className="idea"
-            />
+      {/* <!-- Idea item --> */}
+      <TransitionGroup className="list-complete">
+        { ideas.length && 
+          ideas.map( idea => {
+            return (
+            <Fade key={idea.createdAt}>
+              <AppIdea
+                className="idea"
+                user={user}
+                idea={idea}
+                /* voteIdea={voteIdea} */
+                /* @remove-idea="showRemoveIdeaModal" */
+              />
+          </Fade> )
           })
           }
-      </transition-group>
-      <!-- End Main box --> */}
+      </TransitionGroup>
+      {/* <!-- End Main box --> */}
     </div>
   </div>
   );
