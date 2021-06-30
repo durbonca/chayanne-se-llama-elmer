@@ -19,7 +19,7 @@ function App() {
   );
 
   const [user, setUser] = useState(null)
-
+  const [userVotes, setUserVotes] = useState([]);
   //ideas
   const [ideas, setIdeas] = useState([]);
 
@@ -47,16 +47,34 @@ function App() {
     );
   }
 
-
   useEffect( () => {
-      getIdeas()
+      getIdeas();
+      auth.onAuthStateChanged(async (auth) => {
+        if (auth) {
+          setUser(auth);
+          /* setUserVotes(db.collection("votes").doc(user.uid).onSnapshot((doc) => {
+              if (doc.exists) {
+                let document = doc.data();
+                if ("ideas" in document) {
+                  user.votes = document.ideas;
+                }
+              }
+            })); */
+        } else {
+          setUser(null);
+          setUserVotes([]);
+        }
+      });
     } ,[])
 
+  // get votes 
+
+  
 
   const doLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
-      setUser(await firebase.auth().signInWithPopup(provider))
+      await firebase.auth().signInWithPopup(provider)
     } catch (error) {
       console.error(error);
     }
@@ -64,7 +82,38 @@ function App() {
 
   const doLogout = async () => {
     try {
-      setUser(await firebase.auth().signOut())
+      await firebase.auth().signOut()
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const voteIdea = async ({ id, type }) => {
+    try {
+      let votes = await db.collection("votes").doc(user.uid).get();
+      if (votes.exists) {
+        votes = votes.data().ideas;
+        if (votes.find((vote) => vote === id)) {
+          throw new Error("user already voted!");
+        }
+      }
+      await db
+        .collection("ideas")
+        .doc(id)
+        .update({
+          votes: firebase.firestore.FieldValue.increment(type ? 1 : -1),
+        });
+      await db
+        .collection("votes")
+        .doc(user.uid)
+        .set(
+          {
+            ideas: firebase.firestore.FieldValue.arrayUnion(id),
+          },
+          {
+            merge: true,
+          }
+        );
     } catch (error) {
       console.error(error);
     }
@@ -102,8 +151,9 @@ function App() {
                 className="idea"
                 user={user}
                 idea={idea}
-                /* voteIdea={voteIdea} */
-                /* @remove-idea="showRemoveIdeaModal" */
+                userVotes={userVotes}
+                voteIdea={voteIdea}
+                /*removeIdea={showRemoveIdeaModal} */
               />
           </Fade> )
           })

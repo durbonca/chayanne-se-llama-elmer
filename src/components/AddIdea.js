@@ -9,8 +9,8 @@ export default function AddIdea({user, doLogin, doLogout, db}){
         try {
           await db.collection("ideas").add({
             name: idea,
-            user: user.user.uid,
-            userName: user.user.displayName,
+            user: user.uid,
+            userName: user.displayName,
             createdAt: Date.now(),
             votes: 0,
           });
@@ -48,7 +48,7 @@ export default function AddIdea({user, doLogin, doLogout, db}){
             Primero <a onClick={() => doLogin()} href="#">Logueate</a> para preguntar, pana.
             </p> : 
             <p className="user-actions">
-            🙋 Epale Pana { user.user.displayName }! Click <a onClick={() => doLogout()} href="#">Acá</a> para desloguear
+            🙋 Epale Pana { user.displayName }! Click <a onClick={() => doLogout()} href="#">Acá</a> para desloguear
             </p>}
         </section>
     )    
