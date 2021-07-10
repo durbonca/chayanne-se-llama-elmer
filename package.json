@@ -19,9 +19,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-dotenv | craco start",
-    "build": "craco build",
-    "test": "craco test",
+    "start": "react-dotenv && craco start",
+    "build": "react-dotenv && craco build",
+    "test": "react-dotenv && craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -46,5 +46,15 @@
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.36",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.4"
+  },
+  "react-dotenv": {
+    "whitelist": [
+      "APIKEY",
+      "AUTHDOMAIN",
+      "PROJECTID",
+      "STORAGEBUCKET",
+      "MESSAGINGSENDERID",
+      "APPID"
+    ]
   }
 }
