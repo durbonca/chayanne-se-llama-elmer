@@ -2,22 +2,22 @@
 import removeSvg from "../assets/img/remove.svg"
 import voteArrowSvg from "../assets/img/arrow.svg"
 
-export default function AppIdea({idea, user, userVotes, voteIdea}){
+export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea}){
 
   const userVoted = () => {
     /* if (user.votes) {
       return user.votes.find((item) => item === idea.id);
     } */
   };
-
+  
+  console.log( userVotes )
   return (
       <article className="mb-4 p-3 rounded-lg sm:flex sm:items-center">
       {/* <!-- remove idea --> */}
-      {
+      { user.uid === idea.user &&
       <img
-        //onClick="removeIdea"
+        onClick={() => removeIdea(idea)}
         className="mr-3 cursor-pointer"
-        v-if="userIdea"
         src={removeSvg}
         alt="remove idea"
       />}

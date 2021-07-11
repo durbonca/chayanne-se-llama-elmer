@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import AppIdea from "./components/AppIdea";
 import AddIdea from "./components/AddIdea";
+import RemoveIdea from "./components/RemoveIdea"
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { firebase, auth, db } from './firebase'
 import './index.css';
@@ -18,10 +19,27 @@ function App() {
     </CSSTransition>
   );
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const [userVotes, setUserVotes] = useState([]);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [ideaToRemove, setIdeaToRemove] = useState({});
   //ideas
   const [ideas, setIdeas] = useState([]);
+
+  const showRemoveIdeaModal = idea => {
+    setIdeaToRemove(idea);
+    setIsModalActive(true);
+  }
+
+  const removeIdea = async () => {
+    try {
+      await db.collection("ideas").doc(ideaToRemove.id).delete();
+      setIdeaToRemove({});
+      setIsModalActive(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const getIdeas = async () => {
     db.collection("ideas")
@@ -124,16 +142,18 @@ function App() {
     {/* Main box */}
     <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
       <h1 className="mb-5 text-4xl text-center">Chayanne Se Llama Elmer</h1>
-      {/* <!-- add remove idea modal -->
-      <teleport to="body">
+      
+      {/* <!-- add remove idea modal --> */}
+      {
+      isModalActive &&
         <RemoveIdea
-          v-if="isModalActive"
-          :name="ideaToRemove.name"
-          @remove-cancel="isModalActive = !isModalActive"
-          @remove-ok="removeIdea"
+          name={ideaToRemove.name}
+          removeCancel={() => setIsModalActive(!isModalActive)}
+          removeOk={() => removeIdea()}
         />
-      </teleport>
-      <!-- add idea -->*/}
+     }
+      {/* <!-- add idea --> */}
+
       <AddIdea
         user={user}
         doLogin={doLogin}
@@ -153,7 +173,7 @@ function App() {
                 idea={idea}
                 userVotes={userVotes}
                 voteIdea={voteIdea}
-                /*removeIdea={showRemoveIdeaModal} */
+                removeIdea={showRemoveIdeaModal}
               />
           </Fade> )
           })
