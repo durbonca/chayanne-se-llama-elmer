@@ -38,7 +38,7 @@ export default function AddIdea({user, doLogin, doLogout, db}){
             { 
             user &&
             <input
-                className="w-full p-2 bg-gray-600 text-white sm:flex-1"
+                className="w-full p-2 bg-gray-700 text-white sm:flex-1 cursor-pointer"
                 type="submit"
                 value="Enviar pregunta"
             />}

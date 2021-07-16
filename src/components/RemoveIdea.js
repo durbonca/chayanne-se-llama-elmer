@@ -1,6 +1,6 @@
 export default function RemoveIdea({name, removeCancel, removeOk}){
     return (
-    <div className="w-full flex justify-center fixed top-40">
+    <div className="w-full flex fixed top-40 lg:justify-center">
         <article className="w-3/4 p-4 bg-gray-400 shadow-2xl">
           <p className="text-center text-xl">Borrar La pregunta { name }?</p>
           <section className="flex justify-end">

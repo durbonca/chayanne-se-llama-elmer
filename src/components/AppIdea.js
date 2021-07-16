@@ -1,20 +1,19 @@
 
 import removeSvg from "../assets/img/remove.svg"
 import voteArrowSvg from "../assets/img/arrow.svg"
+import { AcademicCapIcon } from '@heroicons/react/outline'
 
-export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea}){
+export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea, responderIdea}){
 
   const userVoted = () => {
     /* if (user.votes) {
       return user.votes.find((item) => item === idea.id);
     } */
   };
-  
-  console.log( userVotes )
   return (
       <article className="mb-4 p-3 rounded-lg sm:flex sm:items-center">
       {/* <!-- remove idea --> */}
-      { user.uid === idea.user &&
+      { !!user && user.uid === idea.user &&
       <img
         onClick={() => removeIdea(idea)}
         className="mr-3 cursor-pointer"
@@ -46,6 +45,12 @@ export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea}){
             alt="votes down"
           />
         </nav>}
+        <div className="flex justify-end">
+          <AcademicCapIcon 
+          onClick={() => responderIdea(idea)}
+          className="ml-3 cursor-pointer h-8 w-8 text-gray-500 text-right" 
+          aria-hidden="true" />
+        </div>
       </section>
     </article>
   )

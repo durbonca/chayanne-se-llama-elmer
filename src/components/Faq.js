@@ -1,0 +1,19 @@
+import React from 'react'
+
+function Faq() {
+    return (
+    <div className="container mx-auto p-4">
+        <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
+            <article className="mb-4 p-3 rounded-lg sm:flex sm:items-center bg-gray-200">
+                <section className="text-center sm:flex-1 sm:text-left">
+                    <h2 className="text-center text-xl sm:text-2xl sm:leading-6">Titulo</h2>
+                    <p className="text-left">Texto!</p>
+                    <small>Small</small>
+                </section>
+            </article>
+        </div>
+    </div>
+    )
+}
+
+export default Faq
