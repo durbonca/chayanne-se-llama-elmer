@@ -11,6 +11,7 @@ export default function AddIdea({user, doLogin, doLogout, db}){
             name: idea,
             user: user.uid,
             userName: user.displayName,
+            url: '',
             createdAt: Date.now(),
             votes: 0,
           });

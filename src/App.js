@@ -35,6 +35,7 @@ function App() {
   const [ideaToRemove, setIdeaToRemove] = useState({});
   const [isModalResponderActive, setIsModalResponderActive] = useState(false);
   const [ideaToResponder, setIdeaToResponder] = useState({});
+  const [admins, setAdmins] = useState([]);
   //ideas
   const [ideas, setIdeas] = useState([]);
 
@@ -76,12 +77,13 @@ function App() {
       (snapshot) => {
         const newIdeas = [];
         snapshot.docs.forEach((doc) => {
-          let { name, user, userName, createdAt, votes } = doc.data();
+          let { name, user, userName, url, createdAt, votes } = doc.data();
           let id = doc.id;
           newIdeas.push({
             name,
             user,
             userName,
+            url,
             createdAt,
             votes,
             id,
@@ -93,8 +95,24 @@ function App() {
     );
   }
 
+  const getAdmins = async () => {
+    const newAdmins = [];
+    db.collection("admin").get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+          let id = doc.id;
+          newAdmins.push({
+            id,
+          });
+        });
+        setAdmins(newAdmins);
+      },
+      (error) => console.error(error)
+    );
+  }
+
   useEffect( () => {
       getIdeas();
+      getAdmins();
       auth.onAuthStateChanged(async (auth) => {
         if (auth) {
           setUser(auth);
@@ -114,9 +132,6 @@ function App() {
     } ,[])
 
   // get votes 
-
-  
-
   const doLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
@@ -191,6 +206,7 @@ function App() {
           isModalResponderActive &&
             <ResponderIdea
               idea={ideaToResponder}
+              db={db}
               responderCancel={() => setIsModalResponderActive(!isModalResponderActive)}
               responderOk={() => responseIdea()}
             />
@@ -209,17 +225,22 @@ function App() {
             { ideas.length && 
               ideas.map( idea => {
                 return (
-                <Fade key={idea.createdAt}>
-                  <AppIdea
-                    className="idea"
-                    user={user}
-                    idea={idea}
-                    userVotes={userVotes}
-                    voteIdea={voteIdea}
-                    removeIdea={showRemoveIdeaModal}
-                    responderIdea={showResponderIdeaModal}
-                  />
-              </Fade> )
+                <>
+                { !idea.url &&
+                  <Fade key={idea.createdAt}>
+                    <AppIdea
+                      className="idea"
+                      user={user}
+                      idea={idea}
+                      admins={admins}
+                      userVotes={userVotes}
+                      voteIdea={voteIdea}
+                      removeIdea={showRemoveIdeaModal}
+                      responderIdea={showResponderIdeaModal}
+                    />
+                  </Fade>
+                }
+              </> )
               })
               }
           </TransitionGroup>
@@ -230,21 +251,21 @@ function App() {
       <Route path="/respuestas">
       <div className="container mx-auto p-4">
             <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
-                {/* <!-- Idea item --> */}
+                {/* <!-- Idea respondida item --> */}
                 <TransitionGroup className="list-complete">
                   { ideas.length && 
                     ideas.map( idea => {
-                      return (
-                      <Fade key={idea.createdAt}>
-                        <ResponsedIdea
-                          className="idea"
-                          user={user}
-                          idea={idea}
-                          userVotes={userVotes}
-                          voteIdea={voteIdea}
-                          removeIdea={showRemoveIdeaModal}
-                        />
-                    </Fade> )
+                    return (<>
+                      { !!idea.url &&
+                        <Fade key={idea.createdAt}>
+                          <ResponsedIdea
+                            className="idea"
+                            user={user}
+                            idea={idea}
+                          />
+                        </Fade>
+                      } 
+                    </>)
                     })
                     }
                 </TransitionGroup>
