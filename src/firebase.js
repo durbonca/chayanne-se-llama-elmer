@@ -1,6 +1,5 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-import env from "react-dotenv";
 import "firebase/firestore";
 
 const firebaseConfig = {
