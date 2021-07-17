@@ -46,10 +46,10 @@ export default function AddIdea({user, doLogin, doLogout, db}){
             </form>
             { !user ?
             <p className="user-actions">
-            Primero <a onClick={() => doLogin()} href="#">Logueate</a> para preguntar, pana.
+            Primero <button className="underline text-blue-800" onClick={() => doLogin()}>Logueate</button> para preguntar, pana.
             </p> : 
             <p className="user-actions">
-            🙋 Epale Pana { user.displayName }! Click <a onClick={() => doLogout()} href="#">Acá</a> para desloguear
+            🙋 Epale Pana { user.displayName }! Click <button className="underline text-blue-800" onClick={() => doLogout()}>Acá</button> para desloguear
             </p>}
         </section>
     )    
