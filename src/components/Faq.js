@@ -19,9 +19,9 @@ function Faq() {
         />
         <ItemFaq
             title="¿Es obligatorio loguearme?"
-            message="Si, la intención de esto no es porque guardemos tus datos ni te vamos a enviar 
-            correos ni nada de ello. Es solo para evitar la famosa figura del 'Preguntador Anónimo',
-            nos interesa dar el reconocimiento a la persona que hizo la pregunta"
+            message="Si, la intención de esto no es porque vamos a guardar tus datos, ni te vamos a enviar 
+            correos, ni vender tu información, ni nada de ello. Es solo para evitar la famosa figura del 
+            'Preguntador Anónimo', nos interesa dar el reconocimiento a la persona que hizo la pregunta"
             small=""
         />
         <ItemFaq
