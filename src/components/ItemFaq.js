@@ -6,8 +6,8 @@ export const ItemFaq = ({title, message, small}) => {
             <article className="mb-4 p-3 rounded-lg sm:flex sm:items-center bg-gray-200">
                 <section className="text-center sm:flex-1 sm:text-left">
                     <h2 className="text-center text-xl sm:text-2xl sm:leading-6">{title}</h2>
-                    <p className="text-left">{message}</p>
-                    <small>{small}</small>
+                    <p className="text-left mt-4">{message}</p>
+                    <p className="text-justify mt-2 text-xs">{small}</p>
                 </section>
             </article>
         </div>
