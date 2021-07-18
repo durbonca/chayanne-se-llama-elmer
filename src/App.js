@@ -59,17 +59,6 @@ function App() {
     }
   };
 
-  const responseIdea = async () => {
-    try {
-      // await db.collection("ideas").doc(ideaToRemove.id).delete();
-      alert('cojo culo');
-      setIdeaToResponder({});
-      setIsModalResponderActive(false);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   const getIdeas = async () => {
     db.collection("ideas")
     .orderBy("votes", "desc")
@@ -110,28 +99,32 @@ function App() {
     );
   }
 
-  useEffect( () => {
-      getIdeas();
-      getAdmins();
-      auth.onAuthStateChanged(async (auth) => {
-        if (auth) {
-          setUser(auth);
-          /* setUserVotes(db.collection("votes").doc(user.uid).onSnapshot((doc) => {
+  const getVotes = async () => {
+    setUserVotes(db.collection("votes").doc(user.uid).onSnapshot((doc) => {
               if (doc.exists) {
                 let document = doc.data();
                 if ("ideas" in document) {
                   user.votes = document.ideas;
                 }
               }
-            })); */
+            }));
+  }
+
+   // get ideas/votes/admins 
+  useEffect( () => {
+      getIdeas();
+      getAdmins();
+      auth.onAuthStateChanged(async (auth) => {
+        if (auth) {
+          setUser(auth);
+          //getVotes();
         } else {
           setUser(null);
           setUserVotes([]);
         }
       });
     } ,[])
-
-  // get votes 
+ 
   const doLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
@@ -207,8 +200,7 @@ function App() {
             <ResponderIdea
               idea={ideaToResponder}
               db={db}
-              responderCancel={() => setIsModalResponderActive(!isModalResponderActive)}
-              responderOk={() => responseIdea()}
+              responderCancel={() => {setIsModalResponderActive(!isModalResponderActive); setIdeaToResponder({});}}
             />
         }
           {/* <!-- add idea --> */}
@@ -259,6 +251,7 @@ function App() {
                       { !!idea.url &&
                         <Fade key={idea.createdAt}>
                           <ResponsedIdea
+                            key={idea.createdAt}
                             className="idea"
                             user={user}
                             idea={idea}
