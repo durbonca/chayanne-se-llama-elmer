@@ -99,7 +99,7 @@ function App() {
     );
   }
 
-  const getVotes = async () => {
+/*   const getVotes = async () => {
     setUserVotes(db.collection("votes").doc(user.uid).onSnapshot((doc) => {
               if (doc.exists) {
                 let document = doc.data();
@@ -108,7 +108,7 @@ function App() {
                 }
               }
             }));
-  }
+  } */
 
    // get ideas/votes/admins 
   useEffect( () => {
