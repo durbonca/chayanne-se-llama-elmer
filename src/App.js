@@ -61,7 +61,7 @@ function App() {
 
   const getIdeas = async () => {
     db.collection("ideas")
-    // .orderBy("votes", "desc")
+    .orderBy("createdAt", "desc")
     .onSnapshot(
       (snapshot) => {
         const newIdeas = [];
