@@ -6,7 +6,6 @@ import ResponderIdea from "./components/ResponderIdea"
 import { ResponsedIdea } from './components/RespondedIdea'
 import Faq from "./components/Faq"
 import Nav from "./components/Nav"
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { firebase, auth, db } from './firebase'
 import './index.css';
 import {
@@ -18,17 +17,6 @@ import {
 
 function App() {
 
-  // transition
-  const Fade = ({ children, ...props }) => (
-    <CSSTransition
-      {...props}
-      timeout={1000}
-      classNames="idea"
-    >
-      {children}
-    </CSSTransition>
-  );
-
   const [user, setUser] = useState(null);
   const [userVotes, setUserVotes] = useState([]);
   const [isModalActive, setIsModalActive] = useState(false);
@@ -36,7 +24,6 @@ function App() {
   const [isModalResponderActive, setIsModalResponderActive] = useState(false);
   const [ideaToResponder, setIdeaToResponder] = useState({});
   const [admins, setAdmins] = useState([]);
-  //ideas
   const [ideas, setIdeas] = useState([]);
 
   const showRemoveIdeaModal = idea => {
@@ -99,31 +86,34 @@ function App() {
     );
   }
 
-/*   const getVotes = async () => {
-    setUserVotes(db.collection("votes").doc(user.uid).onSnapshot((doc) => {
-              if (doc.exists) {
-                let document = doc.data();
-                if ("ideas" in document) {
-                  user.votes = document.ideas;
-                }
-              }
-            }));
-  } */
+  const getVotes = async () => {
+    if(!!user) {
+      db.collection("votes").doc(user.uid).onSnapshot( (doc) => {
+      if (doc.exists) {
+        let document = doc.data();
+        if ("ideas" in document) {
+          setUserVotes(document.ideas);
+        }
+      }
+      })
+      } else {
+        setUserVotes([]);
+      }
+  }
 
-   // get ideas/votes/admins 
   useEffect( () => {
       getIdeas();
       getAdmins();
-      auth.onAuthStateChanged(async (auth) => {
+      auth.onAuthStateChanged( async (auth) => {
         if (auth) {
           setUser(auth);
-          //getVotes();
         } else {
           setUser(null);
-          setUserVotes([]);
         }
       });
-    } ,[])
+    } ,[]);
+  
+  useEffect( () => getVotes(), [user] );
  
   const doLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -142,7 +132,7 @@ function App() {
     }
   };
 
-  const voteIdea = async ({ id, type }) => {
+  const voteIdea = async ( id, type ) => {
     try {
       let votes = await db.collection("votes").doc(user.uid).get();
       if (votes.exists) {
@@ -213,14 +203,13 @@ function App() {
           />
           
           {/* <!-- Idea item --> */}
-          <TransitionGroup className="list-complete">
             { ideas.length && 
               ideas.map( idea => {
                 return (
                 <>
                 { !idea.url &&
-                  <Fade key={idea.createdAt}>
                     <AppIdea
+                      key={idea.createdAt}
                       className="idea"
                       user={user}
                       idea={idea}
@@ -230,12 +219,10 @@ function App() {
                       removeIdea={showRemoveIdeaModal}
                       responderIdea={showResponderIdeaModal}
                     />
-                  </Fade>
                 }
               </> )
               })
               }
-          </TransitionGroup>
           {/* <!-- End Main box --> */}
         </div>
       </div>
@@ -244,24 +231,20 @@ function App() {
       <div className="container mx-auto p-4">
             <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
                 {/* <!-- Idea respondida item --> */}
-                <TransitionGroup className="list-complete">
                   { ideas.length && 
                     ideas.map( idea => {
                     return (<>
                       { !!idea.url &&
-                        <Fade key={idea.createdAt}>
                           <ResponsedIdea
                             key={idea.createdAt}
                             className="idea"
                             user={user}
                             idea={idea}
                           />
-                        </Fade>
                       } 
                     </>)
                     })
                     }
-                </TransitionGroup>
           {/* <!-- End Main box --> */}
             </div>
         </div>

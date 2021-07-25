@@ -6,10 +6,13 @@ import { AcademicCapIcon } from '@heroicons/react/outline'
 export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea, responderIdea, admins}){
 
   const userVoted = () => {
-    /* if (user.votes) {
-      return user.votes.find((item) => item === idea.id);
-    } */
+    // console.log(userVotes)
+    // console.log((userVotes.find((item) => item === idea.id)));
+    if (userVotes) {
+      return !(userVotes.find((item) => item === idea.id))
+    }
   };
+
   return (
       <article className="mb-4 p-3 rounded-lg sm:flex sm:items-center">
       {/* <!-- remove idea --> */}
@@ -31,7 +34,7 @@ export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea, re
         className="pt-3 border-t-2 mt-6 border-black sm:pl-3 sm:border-t-0 sm:border-l-2 sm:mt-0 sm:flex sm:items-center"
       >
         <h3 className="text-3xl font-bold text-center">{ idea.votes }</h3>
-        { !!user && !userVoted && 
+        { !!user && userVoted() && 
           <nav v-if="" className="flex justify-center sm:block">
           <img
             onClick={() => voteIdea(idea.id, true)}
