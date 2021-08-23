@@ -1,10 +1,11 @@
 import { useState } from "react"
 
-export default function AddIdea({user, doLogin, doLogout, db}){
+export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
 
     const [idea, setIdea] = useState('')
 
     const addIdea = async (event) => {
+      setLoadingVote(true);
         event.preventDefault();
         try {
           await db.collection("ideas").add({
@@ -19,6 +20,7 @@ export default function AddIdea({user, doLogin, doLogout, db}){
           console.error(error);
         }
         setIdea('')
+      setLoadingVote(false);
       }; 
 
     const handleChange = (event) => {

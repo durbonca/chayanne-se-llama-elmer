@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import AppIdea from "./components/AppIdea";
 import AddIdea from "./components/AddIdea";
 import RemoveIdea from "./components/RemoveIdea"
+import {RefreshIcon} from '@heroicons/react/outline'
 import ResponderIdea from "./components/ResponderIdea"
 import { ResponsedIdea } from './components/RespondedIdea'
+import { LoadingVote } from './components/LoadingVote'
 import Faq from "./components/Faq"
 import Nav from "./components/Nav"
 import { firebase, auth, db } from './firebase'
@@ -25,6 +27,7 @@ function App() {
   const [ideaToResponder, setIdeaToResponder] = useState({});
   const [admins, setAdmins] = useState([]);
   const [ideas, setIdeas] = useState([]);
+  const [loadingVote, setLoadingVote] = useState(false);
 
   const showRemoveIdeaModal = idea => {
     setIdeaToRemove(idea);
@@ -37,6 +40,7 @@ function App() {
   }
 
   const removeIdea = async () => {
+    setLoadingVote(true);
     try {
       await db.collection("ideas").doc(ideaToRemove.id).delete();
       setIdeaToRemove({});
@@ -44,6 +48,7 @@ function App() {
     } catch (err) {
       console.error(err);
     }
+    setLoadingVote(false);
   };
 
   const getIdeas = async () => {
@@ -132,6 +137,7 @@ function App() {
   };
 
   const voteIdea = async ( id, type ) => {
+    setLoadingVote(true)
     try {
       let votes = await db.collection("votes").doc(user.uid).get();
       if (votes.exists) {
@@ -160,11 +166,13 @@ function App() {
     } catch (error) {
       console.error(error);
     }
+    setLoadingVote(false)
   };
 
   return (
   <Router>
-    <Nav user={user} doLogin={doLogin} doLogout={doLogout} />
+    <Nav className="mb-14" user={user} doLogin={doLogin} doLogout={doLogout} />
+    { loadingVote && <LoadingVote/> }
     <Switch>
       <Route exact path="/">
         <div className="container mx-auto p-4">
@@ -199,6 +207,7 @@ function App() {
             doLogin={doLogin}
             doLogout={doLogout}
             db={db}
+            setLoadingVote={setLoadingVote}
           />
           
           {/* <!-- Idea item --> */}
@@ -220,7 +229,7 @@ function App() {
                     />
                 }
               </> )
-              }) : "cargando..."
+              }) : <div className="flex items-center justify-center" ><RefreshIcon className="animate-spin w-16 h-16 mx-2.5 text-blue-500" /> cargando... </div>
               }
           {/* <!-- End Main box --> */}
         </div>
@@ -242,7 +251,7 @@ function App() {
                           />
                       } 
                     </>)
-                    }) : "cargando..."
+                    }) : <div className="flex items-center justify-center" ><RefreshIcon className="animate-spin w-16 h-16 mx-2.5 text-blue-500" /> cargando... </div>
                     }
           {/* <!-- End Main box --> */}
             </div>
