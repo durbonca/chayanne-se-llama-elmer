@@ -6,8 +6,6 @@ import { AcademicCapIcon } from '@heroicons/react/outline'
 export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea, responderIdea, admins}){
 
   const userVoted = () => {
-    // console.log(userVotes)
-    // console.log((userVotes.find((item) => item === idea.id)));
     if (userVotes) {
       return !(userVotes.find((item) => item === idea.id))
     }

@@ -86,21 +86,6 @@ function App() {
     );
   }
 
-  const getVotes = async () => {
-    if(!!user) {
-      db.collection("votes").doc(user.uid).onSnapshot( (doc) => {
-      if (doc.exists) {
-        let document = doc.data();
-        if ("ideas" in document) {
-          setUserVotes(document.ideas);
-        }
-      }
-      })
-      } else {
-        setUserVotes([]);
-      }
-  }
-
   useEffect( () => {
       getIdeas();
       getAdmins();
@@ -113,7 +98,21 @@ function App() {
       });
     } ,[]);
   
-  useEffect( () => getVotes(), [user] );
+  useEffect( () => {
+  if(!!user) {
+    db.collection("votes").doc(user.uid).onSnapshot( (doc) => {
+    if (doc.exists) {
+      let document = doc.data();
+      if ("ideas" in document) {
+        setUserVotes(document.ideas);
+      }
+    }
+    })
+    } else {
+      setUserVotes([]);
+    }
+  }
+  , [user]);
  
   const doLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -203,7 +202,7 @@ function App() {
           />
           
           {/* <!-- Idea item --> */}
-            { ideas.length && 
+            { ideas.length ? 
               ideas.map( idea => {
                 return (
                 <>
@@ -221,7 +220,7 @@ function App() {
                     />
                 }
               </> )
-              })
+              }) : "cargando..."
               }
           {/* <!-- End Main box --> */}
         </div>
@@ -231,7 +230,7 @@ function App() {
       <div className="container mx-auto p-4">
             <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
                 {/* <!-- Idea respondida item --> */}
-                  { ideas.length && 
+                  { ideas.length ? 
                     ideas.map( idea => {
                     return (<>
                       { !!idea.url &&
@@ -243,7 +242,7 @@ function App() {
                           />
                       } 
                     </>)
-                    })
+                    }) : "cargando..."
                     }
           {/* <!-- End Main box --> */}
             </div>
