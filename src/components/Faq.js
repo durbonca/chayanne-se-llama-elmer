@@ -26,7 +26,7 @@ function Faq() {
         />
         <ItemFaq
             title="¿Y si no tengo cuenta de google?"
-            message="Lamentablemente el manganzon de nuestro programador por los momentos habilito solo 
+            message="Lamentablemente el manganzón de nuestro programador por los momentos habilito solo 
             la opción con cuentas Google por los momentos"
             small="Pero nos prometió en algún momento iba a habilitar otras opciones de Login, esperamos a que no sea pura coba."
         />
@@ -53,8 +53,8 @@ function Faq() {
             title="¿Como voto por una pregunta?"
             message="Puedes votar a favor o en contra de las otras preguntas de otros usuarios (incluso tu propia pregunta) una única vez, 
             a la derecha de cada pregunta aparece un numero, esa
-            es la cantidad de likes que tiene esa pregunta, puedes votar una única vez en las fechas que están al lado"
-            small="click flecha hacia arriba para indicar que te gusta, hacia abajo para indicar lo contrario."
+            es la cantidad de likes que tiene esa pregunta, puedes votar una única vez en los iconos de likes están al lado"
+            small="Pulgar arriba para indicar que te gusta, pulgar hacia abajo para indicar lo contrario, para votar tienes que estar logueado."
         />
         <ItemFaq
             title="Me equivoque ¿puedo corregirlo?"
