@@ -47,6 +47,9 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
                 value="Enviar pregunta"
             />}
             </form>
+            <div
+              style={{textAlign: 'right'}}
+            >{idea.length} / 144</div>
             { !user ?
             <p className="user-actions">
             Primero <button className="underline text-blue-800" onClick={() => doLogin()}>Logueate</button> para preguntar, pana.
