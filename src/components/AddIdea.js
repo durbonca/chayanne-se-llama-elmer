@@ -42,6 +42,7 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
             user &&
             <input
                 className="w-full p-2 bg-gray-700 text-white sm:flex-1 cursor-pointer"
+                maxlength="144"
                 type="submit"
                 value="Enviar pregunta"
             />}
