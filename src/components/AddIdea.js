@@ -27,13 +27,17 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
         setIdea(event.target.value)
     }
 
+    const colorIdeaLength = () => {
+      return idea.length < 240 ? '#333' : 'red'
+    }
+
     return (
         <section className="mb-6">
             <form onSubmit={addIdea} className="sm:flex">
             <input
                 value={idea}
                 onChange={handleChange}
-                maxlength="144"
+                maxlength="280"
                 className="w-full p-3 sm:flex-auto"
                 type="text"
                 required
@@ -48,8 +52,8 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
             />}
             </form>
             <div
-              style={{textAlign: 'right'}}
-            >{idea.length} / 144</div>
+              style={{textAlign: 'right', marginTop: '1rem', color: colorIdeaLength()}}
+            >{idea.length} / 280</div>
             { !user ?
             <p className="user-actions">
             Primero <button className="underline text-blue-800" onClick={() => doLogin()}>Logueate</button> para preguntar, pana.
