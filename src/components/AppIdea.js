@@ -23,7 +23,7 @@ export default function AppIdea({idea, user, userVotes, voteIdea, removeIdea, re
       />}
       {/* <!-- info --> */}
       <section className="text-center sm:flex-1 sm:text-left">
-        <h2 className="text-xl sm:text-2xl sm:leading-6">{ idea.name }</h2>
+        <h2 className="text-xl sm:text-2xl sm:leading-6 break-words">{ idea.name }</h2>
         <small>Por { idea.userName }</small>
       </section>
       {/* <!-- votos --> */}

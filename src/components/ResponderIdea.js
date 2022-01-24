@@ -16,8 +16,8 @@ function ResponderIdea({idea, responderCancel, db}) {
     }
 
     return (
-        <div className="w-full flex fixed top-40 lg:justify-center">
-        <article className="w-3/4 p-4 bg-gray-400 shadow-2xl">
+        <div style={{maxWidth: '100vw'}} className="w-full flex fixed top-40 lg:justify-center">
+        <article className="w-5/6 p-4 bg-gray-400 shadow-2xl">
           <p className="text-center text-xl mb-4">Respondiendo pregunta { idea.name }</p>
           <Formik initialValues={{ link: '' }} validationSchema={responseValidation} onSubmit={handleSubmit}>
             { ({ isSubmitting }) => (

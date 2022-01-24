@@ -37,7 +37,7 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
             <input
                 value={idea}
                 onChange={handleChange}
-                maxlength="280"
+                maxlength="180"
                 className="w-full p-3 sm:flex-auto"
                 type="text"
                 required
@@ -53,7 +53,7 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
             </form>
             <div
               style={{textAlign: 'right', marginTop: '1rem', color: colorIdeaLength()}}
-            >{idea.length} / 280</div>
+            >{idea.length} / 180</div>
             { !user ?
             <p className="user-actions">
             Primero <button className="underline text-blue-800" onClick={() => doLogin()}>Logueate</button> para preguntar, pana.
