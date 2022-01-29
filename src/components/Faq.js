@@ -33,7 +33,8 @@ function Faq() {
         <ItemFaq
             title="¿Puedo preguntar lo que quiera?"
             message="Antes de hacer cualquier pregunta te invitamos a pasar a la sección de 'preguntas respondidas' en el Menu. 
-            Busca si tu pregunta ya fue respondida por nosotros, allí encontraras el enlace donde ya hablamos sobre ello."
+            Puedes usar el buscador por la palabra clave y revisar si tu pregunta ya fue respondida por nosotros, allí encontraras 
+            el enlace donde ya hablamos sobre el tema."
             small="Intenta de que tu pregunta sea coherente, se pueda entender, no este repetida y no sea una chavistada."
         />
         <ItemFaq

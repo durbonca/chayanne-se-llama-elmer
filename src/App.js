@@ -6,6 +6,7 @@ import {RefreshIcon} from '@heroicons/react/outline'
 import ResponderIdea from "./components/ResponderIdea"
 import { ResponsedIdea } from './components/RespondedIdea'
 import { LoadingVote } from './components/LoadingVote'
+import Search from './components/Search'
 import Faq from "./components/Faq"
 import Nav from "./components/Nav"
 import { firebase, auth, db } from './firebase'
@@ -27,6 +28,8 @@ function App() {
   const [ideaToResponder, setIdeaToResponder] = useState({});
   const [admins, setAdmins] = useState([]);
   const [ideas, setIdeas] = useState([]);
+  const [ideasResponded, setIdeasResponded] = useState([]);
+  const [searchList, setSearchList] = useState([]);
   const [loadingVote, setLoadingVote] = useState(false);
 
   const showRemoveIdeaModal = idea => {
@@ -70,7 +73,8 @@ function App() {
             id,
           });
         });
-        setIdeas(newIdeas);
+        setIdeas(newIdeas.filter(idea=> !idea.url));
+        setIdeasResponded(newIdeas.filter(idea=> !!idea.url));
       },
       (error) => console.error(error)
     );
@@ -169,6 +173,39 @@ function App() {
     setLoadingVote(false)
   };
 
+  const searchBoat = ( ideasResponded, searchList ) => {
+    console.log(ideasResponded, searchList)
+    if(ideasResponded.length) { 
+      if(searchList === null) {
+        return <div>😥 Tu Búsqueda no arrojo ningún resultado...</div>
+      }else {
+        if(searchList.length > 0) {
+          return searchList.map( idea => {
+           return (
+                 <ResponsedIdea
+                   key={idea.createdAt}
+                   className="idea"
+                   user={user}
+                   idea={idea}
+                 />
+             )
+           }) } else {
+           return ideasResponded.map( idea => {
+             return (
+                   <ResponsedIdea
+                     key={idea.createdAt}
+                     className="idea"
+                     user={user}
+                     idea={idea}
+                   />
+               )
+             }) }
+        }
+      } 
+      else 
+      { return (<div className="flex items-center justify-center" ><RefreshIcon className="animate-spin w-16 h-16 mx-2.5 text-blue-500" /> cargando... </div>) } 
+  }
+
   return (
   <Router>
     <Nav className="mb-14" user={user} doLogin={doLogin} doLogout={doLogout} />
@@ -214,8 +251,6 @@ function App() {
             { ideas.length ? 
               ideas.map( idea => {
                 return (
-                <>
-                { !idea.url &&
                     <AppIdea
                       key={idea.createdAt}
                       className="idea"
@@ -227,8 +262,7 @@ function App() {
                       removeIdea={showRemoveIdeaModal}
                       responderIdea={showResponderIdeaModal}
                     />
-                }
-              </> )
+               )
               }) : <div className="flex items-center justify-center" ><RefreshIcon className="animate-spin w-16 h-16 mx-2.5 text-blue-500" /> cargando... </div>
               }
           {/* <!-- End Main box --> */}
@@ -237,22 +271,11 @@ function App() {
       </Route>
       <Route path="/respuestas">
       <div className="container mx-auto p-4">
+        <h1 className='text-center font-bold text-xl my-4'>PREGUNTAS RESPONDIDAS</h1>
+        <Search ideasResponded={ideasResponded} setSearchList={setSearchList} />
             <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
-                {/* <!-- Idea respondida item --> */}
-                  { ideas.length ? 
-                    ideas.map( idea => {
-                    return (<>
-                      { !!idea.url &&
-                          <ResponsedIdea
-                            key={idea.createdAt}
-                            className="idea"
-                            user={user}
-                            idea={idea}
-                          />
-                      } 
-                    </>)
-                    }) : <div className="flex items-center justify-center" ><RefreshIcon className="animate-spin w-16 h-16 mx-2.5 text-blue-500" /> cargando... </div>
-                    }
+                {/* <!-- Idea respondida item --> */} 
+                  { searchBoat(ideasResponded, searchList) }   
           {/* <!-- End Main box --> */}
             </div>
         </div>

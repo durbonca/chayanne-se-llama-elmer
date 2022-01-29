@@ -41,7 +41,7 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
                 className="w-full p-3 sm:flex-auto"
                 type="text"
                 required
-                placeholder="Escribe tu pregunta"
+                placeholder="Escribe tu pregunta..."
             />
             { 
             user &&
