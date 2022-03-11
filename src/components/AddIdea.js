@@ -37,7 +37,7 @@ export default function AddIdea({user, doLogin, doLogout, db, setLoadingVote}){
             <input
                 value={idea}
                 onChange={handleChange}
-                maxlength="180"
+                maxLength="180"
                 className="w-full p-3 sm:flex-auto"
                 type="text"
                 required
