@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react'
-
-
-
 import {RefreshIcon} from '@heroicons/react/outline'
-
 import { ResponsedIdea } from './components/RespondedIdea'
 import { LoadingVote } from './components/LoadingVote'
 import Search from './components/Search'
@@ -11,6 +7,7 @@ import Faq from "./components/Faq"
 import Nav from "./components/Nav"
 import Preguntar from "./components/Preguntar"
 import { firebase, auth, db } from './firebase'
+import ResponderIdea from "./components/ResponderIdea"
 import './index.css';
 import {
   BrowserRouter,
@@ -188,6 +185,9 @@ function App() {
                    className="idea"
                    user={user}
                    idea={idea}
+                   admins={admins}
+                   responderIdea={showResponderIdeaModal}
+                   isModalResponderActive={isModalResponderActive}
                  />
              )
            }) } else {
@@ -198,6 +198,9 @@ function App() {
                      className="idea"
                      user={user}
                      idea={idea}
+                     admins={admins}
+                     responderIdea={showResponderIdeaModal}
+                     isModalResponderActive={isModalResponderActive}
                    />
                )
              }) }
@@ -241,10 +244,18 @@ function App() {
         <div className="container mx-auto p-4">
           <h1 className='text-center font-bold text-xl my-4'>PREGUNTAS RESPONDIDAS</h1>
           <Search ideasResponded={ideasResponded} setSearchList={setSearchList} />
+          {
+            isModalResponderActive &&
+              <ResponderIdea
+                idea={ideaToResponder}
+                db={db}
+                responderCancel={() => {setIsModalResponderActive(!isModalResponderActive); setIdeaToResponder({});}}
+              />
+          }
             <div className="w-full bg-gray-100 shadow-lg p-4 rounded-lg">
                 {/* <!-- Idea respondida item --> */} 
                   { searchBoat(ideasResponded, searchList) }   
-          {/* <!-- End Main box --> */}
+                {/* <!-- End Main box --> */}
             </div>
         </div>
         }
